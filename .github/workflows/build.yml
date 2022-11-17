@@ -46,7 +46,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Create database
-        run: createdb -h localhost -p 5432 -U test -w test_name
+        run: psql -h localhost -p 5432 -U test -c 'CREATE DATABASE "test_name";'
 
       - name: Lint code
         run: pylint .
