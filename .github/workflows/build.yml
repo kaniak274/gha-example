@@ -9,8 +9,33 @@ jobs:
   lint-project:
     runs-on: ubuntu-latest
 
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+
+    services:
+      db:
+        image: postgres
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: secret
+
     steps:
       - uses: actions/checkout@v3
+
+      - name: Cache Python Deps
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-python
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements/*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
       - name: Take Python 3.10
         uses: actions/setup-python@v1
@@ -20,7 +45,8 @@ jobs:
       - name: Install Deps
         run: pip install -r requirements.txt
 
+      - name: Create database
+        run: createdb -h localhost -p 5432 -U test_user -w test_name
+
       - name: Lint code
-        env:
-          PYTHONPATH: ${{ github.workspace }}
         run: pylint .
