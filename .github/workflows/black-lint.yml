@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+    paths:
+      - 'app/**'
+
 jobs:
   lint-project:
     runs-on: ubuntu-latest
