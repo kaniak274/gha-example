@@ -33,5 +33,5 @@ jobs:
         run: pip install -r tests.txt
 
       - name: Lint code
-        run: pytest
+        run: pytest test.py
         working-directory: app
