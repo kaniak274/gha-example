@@ -12,9 +12,6 @@ jobs:
   lint-project:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: kaniak274/gha-example/.github/workflows/re-used-workflow@main
-        with:
-          path: ./app
+    uses: kaniak274/gha-example/.github/workflows/re-used-workflow@main
+    with:
+      path: ./app
