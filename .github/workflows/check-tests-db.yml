@@ -49,6 +49,8 @@ jobs:
       - name: Create Databases
         run: |
           psql -h localhost -p 5432 -U example -c 'CREATE DATABASE "random_name";'
+        env:
+          PGPASSWORD: secret
 
       - name: Take Python 3.10
         uses: actions/setup-python@v1
