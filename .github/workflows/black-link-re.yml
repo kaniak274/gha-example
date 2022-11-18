@@ -6,12 +6,10 @@ on:
       - main
 
     paths:
-      - './github/workflows/black-link-re.yml'
+      - '.github/workflows/black-link-re.yml'
 
 jobs:
   lint-project:
-    runs-on: ubuntu-latest
-
-    uses: kaniak274/gha-example/.github/workflows/re-used-workflow@main
+    uses: kaniak274/gha-example/.github/workflows/re-used-workflow.yml@main
     with:
       path: ./app
