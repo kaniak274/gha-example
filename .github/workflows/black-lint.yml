@@ -34,3 +34,4 @@ jobs:
 
       - name: Lint code
         run: black .
+        working-directory: app
