@@ -1,0 +1,66 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+
+    paths:
+      - 'app2/**'
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      UNI_DATABASE_URI: postgresql://example:secret@localhost:5432/random_name
+
+    db:
+      image: postgres
+      ports:
+        - 5432:5432
+      env:
+        POSTGRES_DB: example
+        POSTGRES_USER: example
+        POSTGRES_PASSWORD: secret
+      options: >-
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache Python Deps
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-python
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/requirements/*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Create Databases
+        run: |
+          psql -h localhost -p 5432 -U example -c 'CREATE DATABASE "random_name";'
+
+      - name: Take Python 3.10
+        uses: actions/setup-python@v1
+        with:
+          python-version: '3.10'
+
+      - name: Install Deps
+        run: pip install -r requirements.txt
+        working-directory: app2
+
+      - name: Run migrations
+        run: alembic upgrade head
+        working-directory: app2
+
+      - name: Lint code
+        run: pytest test.py
+        working-directory: app2
