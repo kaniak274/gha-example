@@ -6,7 +6,7 @@ on:
       - main
 
     paths:
-      - 'app/**'
+      - '.github/workflows/build-artifacts.yml'
 
 jobs:
   build:
