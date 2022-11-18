@@ -1,4 +1,4 @@
-from .db import get_session, save_item, RandomDatabaseModel
+from db import get_session, save_item, RandomDatabaseModel
 
 
 def test_save_saves_to_db():

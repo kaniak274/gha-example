@@ -35,6 +35,6 @@ jobs:
       - name: Install Deps
         run: pip install -r tests.txt
 
-      - name: Lint code
+      - name: Run tests
         run: pytest test.py
         working-directory: app
