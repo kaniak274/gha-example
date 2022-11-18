@@ -1,4 +1,4 @@
-name: Lint code
+name: Build artifact
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: ./Dockerfile
+          file: ./app/Dockerfile
           push: false
           tags: example
           outputs: type=docker,dest=/tmp/image.tar
